@@ -1,0 +1,5 @@
+# virtual environment and test files, cache and database
+/.venv
+/tests
+/app/__pycache__/ 
+/DB
