@@ -2,6 +2,7 @@ import sqlite3 as sql  # SQL Database
 
 
 def create_user_db():  # Create User Database with username, id, password
+    
     con = sql.connect('DB/users.sqlite3')
     cur = con.cursor()
     cur.execute(
@@ -37,6 +38,17 @@ def get_user_name(id):  # Get username from database
     rows = cur.fetchall()
     con.close()
     return rows[0][0]
+
+def check_user(name):  # Check if user exists in database
+    con = sql.connect('DB/users.sqlite3')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM users")
+    rows = cur.fetchall()
+    con.close()
+    for row in rows:
+        if row[0] == name:
+            return True
+    return False
 
 
 def create_navigation_db():  # Create Navigation Database with username, navigation

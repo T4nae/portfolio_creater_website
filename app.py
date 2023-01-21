@@ -4,6 +4,7 @@ import os
 
 if __name__ == '__main__':
     if os.path.exists('DB/users.sqlite3') == False:  # Check if user database exists
+        os.makedirs('DB')  # Create DB folder
         create_user_db()
     # Check if navigation database exists
     if os.path.exists('DB/navigation.sqlite3') == False:

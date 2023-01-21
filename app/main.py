@@ -63,9 +63,12 @@ def portfolio(name):
         username = session['username']  # Set username to session username
         # Render portfolio page with navigation, name, username
         return render_template('portfolio.html', navigation=nav, name=name, username=username)
-    else:
+    elif check_user(name):  # If user exists
         # Render portfolio page with navigation, name
         return render_template('portfolio.html', navigation=nav, name=name)
+    else:
+        # Render error if user does not exists
+        return '404 USER NOT FOUND'
 
 
 # portfolio route edit only
