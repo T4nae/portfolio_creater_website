@@ -8,6 +8,7 @@ let PORT;
 process.env.STATUS === "production" ? (PORT = process.env.PROD_PORT) : (PORT = process.env.DEV_PORT);
 console.log(PORT);
 
+app.use(require("cors")());
 app.use("/", require("./routes/auth"));
 app.use("/", require("./routes/portfolio"));
 
