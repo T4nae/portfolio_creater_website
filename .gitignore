@@ -3,3 +3,6 @@
 /tests
 /app/__pycache__/ 
 /DB
+/client/node_modules
+/api/node_modules
+/api/.env
