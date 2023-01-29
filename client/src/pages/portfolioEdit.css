@@ -1,0 +1,29 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "content content content sidebar";
+    grid-gap: 10px;
+    background-color: #fff;
+    color: #444;
+}
+
+.content {
+    grid-area: content;
+}
+
+.sidebar {
+    grid-area: sidebar;
+    background-color: #f1f1f1;
+    height: 100vh;
+}
+
+.sidebar-title {
+    text-align: center;
+    padding: 20px;
+    border-bottom: rgba(68, 68, 68, 0.107) 3px solid;
+}
