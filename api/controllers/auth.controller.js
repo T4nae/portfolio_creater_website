@@ -1,9 +1,8 @@
-const User = require('../models/user.model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
+const User = require("../models/user.model");
+const bcrypt = require("bcrypt");
+const JWT = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
 const jwtSecret = process.env.JWT_SECRET;
-const Session = require('express-session');
 
 module.exports = {
     register: async (req, res) => {
@@ -11,7 +10,10 @@ module.exports = {
         const errors = validationResult(req);
         // check for errors
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array(), message: "Invalid registration data" });
+            return res.status(400).json({
+                errors: errors.array(),
+                message: "Invalid registration data",
+            });
         }
         try {
             // check if user exists
@@ -22,11 +24,17 @@ module.exports = {
             // hash password
             const hashedPassword = await bcrypt.hash(password, 12);
             // create user
-            const user = new User({ email, password: hashedPassword, username });
+            const user = new User({
+                email: email,
+                username: username,
+                password: hashedPassword,
+            });
             await user.save();
             res.status(201).json({ message: "User created" });
         } catch (e) {
-            res.status(500).json({ message: "Something went wrong, try again" });
+            res.status(500).json({
+                message: "Something went wrong, try again",
+            });
         }
     },
     login: async (req, res) => {
@@ -34,11 +42,14 @@ module.exports = {
         const errors = validationResult(req);
         // check for errors
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array(), message: "Invalid login data" });
+            return res.status(400).json({
+                errors: errors.array(),
+                message: "Invalid login data",
+            });
         }
         try {
             const user = await User.findOne({
-                email
+                email,
             });
             // check if user exists
             if (!user) {
@@ -50,19 +61,34 @@ module.exports = {
                 return res.status(400).json({ message: "Invalid password" });
             }
             // create and return token
-            const token = jwt.sign(
-                { userId: user.id },
-                jwtSecret,
-                { expiresIn: '1h' }
-            );
-            Session.token = token;
-            res.json({ token, userId: user.id });
+            const token = JWT.sign({ userId: user.id }, jwtSecret, {
+                expiresIn: "1h",
+            });
+            req.session.token = token;
+            req.session.save(() => {
+                return res.json({
+                    token,
+                    userId: user.id,
+                    username: user.username,
+                });
+            });
         } catch (e) {
-            res.status(500).json({ message: "Something went wrong, try again" });
+            console.log(e);
+            res.status(500).json({
+                message: "Something went wrong, try again",
+            });
         }
     },
     logout: async (req, res) => {
-        Session.destroy();
-        res.status(200).json({ message: "Logout" });
+        try {
+            req.session.destroy(() => {
+                res.json({ message: "Logged out" });
+            });
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({
+                message: "Something went wrong, try again",
+            });
+        }
     },
-}
+};

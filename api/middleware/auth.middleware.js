@@ -1,25 +1,18 @@
 const jwt = require("jsonwebtoken");
-const express = require("express");
-const authMiddleware = express.Router();
-const session = require("express-session");
+const JWT_SECRET = process.env.JWT_SECRET;
 
-authMiddleware.use(session({            
-    secret: 'my-secret',     
-    resave: false,           
-    saveUninitialized: true
-}));
-
-authMiddleware.use((req, res, next) => {
-    const token = session.token;
+function authMiddleware(req, res, next) {
+    const token = req.headers.authorization.split(" ")[1];
     if (!token) {
         return res.status(401).json({ message: "Not authorized" });
     }
     try {
-        const decoded = jwt.verify(token, config.get("jwtSecret"));
+        const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
         next();
     } catch (e) {
         res.status(401).json({ message: "Not authorized" });
     }
-});
+};
+
 module.exports = authMiddleware;
