@@ -5,15 +5,27 @@ const PortfolioSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
-    },
-    id: {
-        type: Number,
         required: true,
     },
-    html: {
+    type: {
         type: String,
         required: true,
     },
+    title: {
+        type: String
+    },
+    content: {
+        type: String
+    },
+    style: {
+        type: Object,
+        css: {
+            type: String
+        },
+        class: {
+            type: String
+        },
+    }
 });
 
 module.exports = mongoose.model("Portfolio", PortfolioSchema);

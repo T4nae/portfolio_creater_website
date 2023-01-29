@@ -7,6 +7,11 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
     password: {
         type: String,
         required: true
@@ -15,10 +20,10 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    portfolio: {
+    portfolio: [{
         type: Schema.Types.ObjectId,
         ref: 'Portfolio'
-    }
+    }]
 });
 
 module.exports = mongoose.model('User', UserSchema);
