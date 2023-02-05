@@ -28,8 +28,7 @@ function PortfolioEdit(props) {
                 .then((data) => {
                     if (!data.message) {
                         setPortfolio(data);
-                    } else if (
-                        data.message === "Portfolio not found" ) {
+                    } else if (data.message === "Portfolio not found") {
                         setPortfolio([]);
                     }
                 })
@@ -37,7 +36,7 @@ function PortfolioEdit(props) {
         } catch (error) {
             console.log(error);
         }
-    }, [ props, username ]);
+    }, [props, username]);
 
     const addSubmit = (e) => {
         e.preventDefault();
@@ -54,9 +53,10 @@ function PortfolioEdit(props) {
             try {
                 fetch(props.proxy + "/portfolio/auth/create/" + username, {
                     method: "POST",
-                    headers: { 
+                    headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer " + localStorage.getItem("token"),
+                        Authorization:
+                            "Bearer " + localStorage.getItem("token"),
                     },
                     body: JSON.stringify(data),
                 })
@@ -93,9 +93,9 @@ function PortfolioEdit(props) {
         try {
             fetch(props.proxy + "/portfolio/auth/edit/" + username, {
                 method: "PUT",
-                headers: { 
+                headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    Authorization: "Bearer " + localStorage.getItem("token"),
                 },
                 body: JSON.stringify(data),
             })
@@ -267,7 +267,7 @@ function PortfolioEdit(props) {
                                         aria-expanded="false"
                                         aria-controls={`collapse${index + 1}`}
                                     >
-                                        {index + 1}.{" "}
+                                        {index + 1}. {element.type} -{" "}
                                         {element.title
                                             ? element.title
                                             : element.content}
