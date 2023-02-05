@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate, NavLink } from "react-router-dom";
+import "./nav.css";
 
 const Nav = (props) => {
     const history = useNavigate();
@@ -90,7 +91,8 @@ const Nav = (props) => {
                                         aria-current="page"
                                         to={
                                             "/portfolio/" +
-                                            localStorage.getItem("user")
+                                            localStorage.getItem("user") +
+                                            "/edit"
                                         }
                                     >
                                         Portfolio
