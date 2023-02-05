@@ -3,3 +3,5 @@
 /tests
 /app/__pycache__/ 
 /DB
+/api
+/client
