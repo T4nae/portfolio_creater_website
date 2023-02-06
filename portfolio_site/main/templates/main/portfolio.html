@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Portfolio</title>
+</head>
+<body>
+    {% for portfolio in portfolios %}
+        {if portfolio.type == 'text'}
+            {if portfolio.title != '' and portfolio.content != ''}
+                <div class="{{ portfolio.class }}">
+                    <h2>{{ portfolio.title }}</h2>
+                    <p>{{ portfolio.content }}</p>
+                </div>
+            {elif portfolio.title != '' and portfolio.content == ''}
+                <div class="{{ portfolio.class }}">
+                    <h2>{{ portfolio.title }}</h2>
+                </div>
+            {elif portfolio.title == '' and portfolio.content != ''}
+                <div class="{{ portfolio.class }}">
+                    <p>{{ portfolio.content }}</p>
+                </div>
+            {endif}
+        {% elif portfolio.type == 'image' %}
+            <div class="{{ portfolio.class }}">
+                <img src="{{ portfolio.content }}" alt="{{ portfolio.title }}">
+            </div>
+        {% elif portfolio.type == 'video' %}
+            <div class="{{ portfolio.class }}">
+                <video src="{{ portfolio.content }}" alt='{{ portfolio.title }}' controls></video>
+            </div>
+        {% elif portfolio.type == 'audio' %}
+            <div class="{{ portfolio.class }}">
+                <audio src="{{ portfolio.content }}" alt='{{ portfolio.title }}' controls></audio>
+            </div>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>
