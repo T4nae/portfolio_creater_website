@@ -4,3 +4,5 @@
 /api/.env
 /api/.env.test
 /portfolio_site
+/app
+/DB
