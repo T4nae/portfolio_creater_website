@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
-const jwtSecret = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = {
     register: async (req, res) => {
@@ -61,7 +61,7 @@ module.exports = {
                 return res.status(400).json({ message: "Invalid password" });
             }
             // create and return token
-            const token = JWT.sign({ userId: user.id }, jwtSecret, {
+            const token = JWT.sign({ userId: user.id }, JWT_SECRET, {
                 expiresIn: "1h",
             });
             req.session.token = token;
@@ -80,15 +80,28 @@ module.exports = {
         }
     },
     logout: async (req, res) => {
-        try {
-            req.session.destroy(() => {
-                res.json({ message: "Logged out" });
-            });
-        } catch (e) {
-            console.log(e);
-            res.status(500).json({
-                message: "Something went wrong, try again",
-            });
+        const token = req.headers.authorization.split(" ")[1];
+        if (token) {
+            try {
+                const decoded = JWT.verify(token, JWT_SECRET);
+                if (decoded) {
+                    try {
+                        req.session.destroy(() => {
+                            res.json({ message: "Logged out" });
+                        });
+                    } catch (e) {
+                        console.log(e);
+                        res.status(500).json({
+                            message: "Something went wrong, try again",
+                        });
+                    }
+                }
+            } catch (e) {
+                console.log(e);
+                res.status(500).json({
+                    message: "Something went wrong, try again",
+                });
+            }
         }
     },
 };
