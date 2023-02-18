@@ -29,6 +29,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'main:about' %}">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'main:contact' %}">Contact</a></li>
                     {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'main:portfolio' user.get_username %}">Portfolio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'main:logout' %}">Logout</a></li>
                     {% else %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'main:register' %}">Sign Up</a></li>
@@ -56,70 +57,26 @@
     <!-- End of Navigation bar -->
 
     <!-- Main -->
-    <div class="container-fluid">
+    <div class="container main">
         <div class="row">
-            <!-- Content -->
-            {% if user.is_authenticated %}
-            <div class="col-md-9 p-0">
-                {% else %}
-                <div class="col-md-12 p-0">
-                    {% endif %}
-                    {% for item in portfolio %}
-                    {{item.element|safe}}
-                    {% endfor %}
-                </div>
-                <!-- End of Content -->
-
-                <!-- Sidebar -->
-                {% if user.is_authenticated %}
-                <div class="col-md-3">
-                    <div class="container">
-                        <form action="{% url 'main:portfolio_edit' user.get_username %}" method="post"
-                            id="portfolio_form">
-                            {% csrf_token %}
-                            <select class="form-select" name="type" id="type">
-                                <option value="text">Text</option>
-                                <option value="image">Image</option>
-                                <option value="video">Video</option>
-                                <option value="audio">audio</option>
-                            </select>
-                            <input type="text" name="title" class="form-control" placeholder="Title">
-                            <input type="text" name="content" class="form-control" placeholder="Content">
-                            <input type="text" name="css" class="form-control" placeholder="CSS">
-                            <input type="text" name="class" class="form-control" placeholder="Class">
-                            <button type="submit" class="btn btn-primary">ADD</button>
-                        </form>
-                    </div>
-                    <div class="container">
-                        <form action="{% url 'main:portfolio_edit' user.get_username %}" method="post"
-                            id="portfolio_delete_form">
-                            {% csrf_token %}
-                            <select class="selectpicker form-control" name="delete" id="delete">
-                                {% for item in portfolio %}
-                                <option value="{{ item.id }}">{{ item.element }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit" class="btn btn-primary">DELETE</button>
-                        </form>
-                    </div>
-                </div>
-                {% endif %}
-                <!-- End of Sidebar -->
+            <div class="col-md-12">
+                <h1>Home</h1>
             </div>
         </div>
-        <!-- End of Main -->
+    </div>
+    <!-- End of Main -->
 
-        <!-- Js -->
-        <script>
-            if ('{{ login_error }}') {
-                const popover = bootstrap.Popover.getOrCreateInstance('#popover')
-                popover.setContent({
-                    '.popover-body': '{{ login_error }}'
-                });
-                popover.show();
-            }
-        </script>
-        <!-- End of Js -->
+    <!-- Js -->
+    <script>
+        if ('{{ login_error }}') {
+            const popover = bootstrap.Popover.getOrCreateInstance('#popover')
+            popover.setContent({
+                '.popover-body': '{{ login_error }}'
+            });
+            popover.show();
+        }
+    </script>
+    <!-- End of Js -->
 </body>
 
 </html>

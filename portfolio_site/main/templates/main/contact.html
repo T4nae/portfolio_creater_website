@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-light navbar-expand-lg bg-light shadow-sm rounded">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'main:home' %}">
+                    <img src="{% static 'images/Letterpress_Title.png' %}" alt="logo" style="height:50px;">
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'main:about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'main:contact' %}">Contact</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link"
+                            href="{% url 'main:portfolio' user.get_username %}">Portfolio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'main:logout' %}">Logout</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'main:register' %}">Sign Up</a></li>
+                    <li>
+                        <form class="form-inline" action="{% url 'main:login' %}" method="post" id="login_form">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="hidden" name="next" value="{{ request.path }}">
+                                <input type="text" class="form-control" placeholder="Username" name="username"
+                                    id="username" value="{{ username }}">
+                                <input type="password" class="form-control" placeholder="password" name="password"
+                                    id="password" value="{{ password }}">
+                                <button class="btn btn-primary" type="submit" data-bs-container="body"
+                                    data-bs-toggle="popover" data-bs-placement="bottom"
+                                    data-bs-content="body of popover to be replaced by javascript"
+                                    data-bs-trigger="hover focus" id="popover">Login</button>
+                            </div>
+                        </form>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End of Navigation bar -->
+
+    <!-- Main -->
+    <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+        <div class="container position-absolute top-50 start-50 translate-middle">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                    <div class="card" style="border-radius: 15px;">
+                        <div class="card-body p-5">
+                            <h2 class="text-uppercase text-center mb-5">Contact Us!</h2>
+
+                            <form action="{% url 'main:contact' %}" method="post">
+                                {% csrf_token %}
+                                <div class="form-outline mb-4">
+                                    <input type="text" id="form3Example1cg" name="username"
+                                        class="form-control form-control-lg" />
+                                    <label class="form-label" for="form3Example1cg">Your Name</label>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <input type="email" id="form3Example3cg" name="email"
+                                        class="form-control form-control-lg" />
+                                    <label class="form-label" for="form3Example3cg">Your Email</label>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <input type="text" id="form3Example4cg" name="subject"
+                                        class="form-control form-control-lg" />
+                                    <label class="form-label" for="form3Example4cg">Subject</label>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <textarea class="form-control" id="form3Example5cg" name="message"
+                                        rows="4"></textarea>
+                                    <label class="form-label" for="form3Example5cg">Message</label>
+                                </div>
+
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">Send</button>
+                                </div>
+                            </form>
+
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.type == 'error' %}
+                            <div class="alert alert-danger text-center mt-4" role="alert">
+                                {{ message.message }}
+                            </div>
+                            {% elif message.type == 'success' %}
+                            <div class="alert alert-success text-center mt-4" role="alert">
+                                {{ message.message }}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Main -->
+
+            <!-- Js -->
+            <script>
+                if ('{{ login_error }}') {
+                    const popover = bootstrap.Popover.getOrCreateInstance('#popover')
+                    popover.setContent({
+                        '.popover-body': '{{ login_error }}'
+                    });
+                    popover.show();
+                }
+            </script>
+            <!-- End of Js -->
+</body>
+
+</html>

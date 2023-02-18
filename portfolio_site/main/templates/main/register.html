@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
 </head>
 
-<body>
+<body style="background-image: url('https://wallpaperaccess.com/full/1131585.jpg'); background-size: cover;">
     <!-- Navigation bar -->
     <nav class="navbar navbar-light navbar-expand-lg bg-light shadow-sm rounded">
         <div class="container-fluid">
@@ -29,6 +29,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'main:about' %}">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'main:contact' %}">Contact</a></li>
                     {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'main:portfolio' user.get_username %}">Portfolio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'main:logout' %}">Logout</a></li>
                     {% else %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'main:register' %}">Sign Up</a></li>
@@ -55,71 +56,67 @@
     </nav>
     <!-- End of Navigation bar -->
 
-    <!-- Main -->
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Content -->
-            {% if user.is_authenticated %}
-            <div class="col-md-9 p-0">
-                {% else %}
-                <div class="col-md-12 p-0">
-                    {% endif %}
-                    {% for item in portfolio %}
-                    {{item.element|safe}}
-                    {% endfor %}
-                </div>
-                <!-- End of Content -->
+    <!-- Register form -->
+    <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+        <div class="container position-absolute top-50 start-50 translate-middle">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                    <div class="card" style="border-radius: 15px;">
+                        <div class="card-body p-5">
+                            <h2 class="text-uppercase text-center mb-5">Create an account</h2>
 
-                <!-- Sidebar -->
-                {% if user.is_authenticated %}
-                <div class="col-md-3">
-                    <div class="container">
-                        <form action="{% url 'main:portfolio_edit' user.get_username %}" method="post"
-                            id="portfolio_form">
-                            {% csrf_token %}
-                            <select class="form-select" name="type" id="type">
-                                <option value="text">Text</option>
-                                <option value="image">Image</option>
-                                <option value="video">Video</option>
-                                <option value="audio">audio</option>
-                            </select>
-                            <input type="text" name="title" class="form-control" placeholder="Title">
-                            <input type="text" name="content" class="form-control" placeholder="Content">
-                            <input type="text" name="css" class="form-control" placeholder="CSS">
-                            <input type="text" name="class" class="form-control" placeholder="Class">
-                            <button type="submit" class="btn btn-primary">ADD</button>
-                        </form>
-                    </div>
-                    <div class="container">
-                        <form action="{% url 'main:portfolio_edit' user.get_username %}" method="post"
-                            id="portfolio_delete_form">
-                            {% csrf_token %}
-                            <select class="selectpicker form-control" name="delete" id="delete">
-                                {% for item in portfolio %}
-                                <option value="{{ item.id }}">{{ item.element }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit" class="btn btn-primary">DELETE</button>
-                        </form>
+                            <form action="{% url 'main:register' %}" method="post">
+                                {% csrf_token %}
+                                <div class="form-outline mb-4">
+                                    <input type="text" id="form3Example1cg" name="username"
+                                        class="form-control form-control-lg" />
+                                    <label class="form-label" for="form3Example1cg">Your Name</label>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <input type="email" id="form3Example3cg" name="email"
+                                        class="form-control form-control-lg" />
+                                    <label class="form-label" for="form3Example3cg">Your Email</label>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <input type="password" id="form3Example4cg" name="password"
+                                        class="form-control form-control-lg" />
+                                    <label class="form-label" for="form3Example4cg">Password</label>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <input type="password" id="form3Example4cdg" name="password2"
+                                        class="form-control form-control-lg" />
+                                    <label class="form-label" for="form3Example4cdg">Repeat your password</label>
+                                </div>
+
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit"
+                                        class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
+                                </div>
+
+                            </form>
+
+                        </div>
                     </div>
                 </div>
-                {% endif %}
-                <!-- End of Sidebar -->
             </div>
         </div>
-        <!-- End of Main -->
+    </div>
+    <!-- End of Register form -->
 
-        <!-- Js -->
-        <script>
-            if ('{{ login_error }}') {
-                const popover = bootstrap.Popover.getOrCreateInstance('#popover')
-                popover.setContent({
-                    '.popover-body': '{{ login_error }}'
-                });
-                popover.show();
-            }
-        </script>
-        <!-- End of Js -->
+    <!-- Js -->
+    <script>
+        if ('{{ login_error }}') {
+            const popover = bootstrap.Popover.getOrCreateInstance('#popover')
+            popover.setContent({
+                '.popover-body': '{{ login_error }}'
+            });
+            popover.show();
+        }
+    </script>
+    <!-- End of Js -->
 </body>
 
 </html>
